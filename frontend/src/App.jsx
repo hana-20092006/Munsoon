@@ -12,11 +12,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const API_URL =
-  "http://127.0.0.1:8000/api/munsoon/analyze";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
-const COMPARE_URL =
-  "http://127.0.0.1:8000/api/munsoon/compare";
+const API_URL = `${API_BASE_URL}/api/munsoon/analyze`;
+const COMPARE_URL = `${API_BASE_URL}/api/munsoon/compare`;
 
 function App() {
   const [result, setResult] = useState(null);
@@ -428,7 +428,136 @@ function App() {
 
             </section>
 
+            {/* 24-HOUR ENERGY PROFILE */}
 
+<section className="bg-slate-900 border border-slate-800 rounded-3xl p-8 mb-6">
+
+  <div className="flex items-center justify-between mb-2">
+
+    <div>
+
+      <h2 className="text-2xl font-bold">
+        24-Hour Energy Profile
+      </h2>
+
+      <p className="text-slate-400 mt-1">
+        Solar generation vs expected household demand
+      </p>
+
+    </div>
+
+    <div className="text-3xl">
+      ☀️
+    </div>
+
+  </div>
+
+
+  <p className="text-slate-500 text-sm mb-8">
+    Monsoon prototype scenario • Values represent estimated
+    hourly energy availability and household demand.
+  </p>
+
+
+  <div className="w-full h-80">
+
+    <ResponsiveContainer
+      width="100%"
+      height="100%"
+    >
+
+      <LineChart
+        data={hourlyEnergyData}
+        margin={{
+          top: 10,
+          right: 20,
+          left: 10,
+          bottom: 10,
+        }}
+      >
+
+        <CartesianGrid
+          strokeDasharray="3 3"
+          stroke="#334155"
+        />
+
+        <XAxis
+          dataKey="hour"
+          stroke="#94a3b8"
+          interval={2}
+        />
+
+        <YAxis
+          stroke="#94a3b8"
+          label={{
+            value: "Energy (kWh)",
+            angle: -90,
+            position: "insideLeft",
+            fill: "#94a3b8",
+          }}
+        />
+
+        <Tooltip />
+
+        <Legend />
+
+        <Line
+          type="monotone"
+          dataKey="solar"
+          name="Solar Generation"
+          stroke="#facc15"
+          strokeWidth={3}
+          dot={false}
+        />
+
+        <Line
+          type="monotone"
+          dataKey="demand"
+          name="Household Demand"
+          stroke="#60a5fa"
+          strokeWidth={3}
+          dot={false}
+        />
+
+      </LineChart>
+
+    </ResponsiveContainer>
+
+  </div>
+
+
+  <div className="grid md:grid-cols-2 gap-4 mt-6">
+
+    <div className="bg-slate-800 rounded-2xl p-5">
+
+      <p className="text-slate-400 text-sm">
+        Daytime Insight
+      </p>
+
+      <p className="text-slate-200 mt-2">
+        Solar generation rises during daylight hours but
+        remains limited in this monsoon scenario.
+      </p>
+
+    </div>
+
+
+    <div className="bg-slate-800 rounded-2xl p-5">
+
+      <p className="text-slate-400 text-sm">
+        Evening Risk
+      </p>
+
+      <p className="text-slate-200 mt-2">
+        Household demand increases as solar generation
+        falls, increasing dependence on stored energy.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
             {/* REACTIVE VS MUNSOON */}
 
             {comparison && (
